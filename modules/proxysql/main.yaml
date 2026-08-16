@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: proxysql-config
+data:
+  proxysql.cnf: |
+    datadir="/var/lib/proxysql"
+
+    admin_variables=
+    {
+      admin_credentials="admin:admin"
+      mysql_ifaces="0.0.0.0:6032"
+    }
+
+    mysql_variables=
+    {
+      interfaces="0.0.0.0:6033"
+      max_connections=2000
+    }
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proxysql
+spec:
+  replicas: 1   # IMPORTANT (ProxySQL is stateful)
+  selector:
+    matchLabels:
+      app: proxysql
+  template:
+    metadata:
+      labels:
+        app: proxysql
+    spec:
+      containers:
+      - name: proxysql
+        image: proxysql/proxysql:2.6.3   # DO NOT use latest
+        command: ["proxysql", "-f", "-c", "/etc/proxysql.cnf"]
+
+        ports:
+        - containerPort: 6032
+        - containerPort: 6033
+
+        volumeMounts:
+        - name: config
+          mountPath: /etc/proxysql.cnf
+          subPath: proxysql.cnf
+        - name: data
+          mountPath: /var/lib/proxysql
+
+      volumes:
+      - name: config
+        configMap:
+          name: proxysql-config
+
+      - name: data
+        emptyDir: {}   # replace with PVC in production
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxysql
+spec:
+  type: LoadBalancer
+  selector:
+    app: proxysql
+  ports:
+    - name: mysql
+      port: 6033
+      targetPort: 6033
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxysql-admin
+spec:
+  type: ClusterIP
+  selector:
+    app: proxysql
+  ports:
+    - name: admin
+      port: 6032
+      targetPort: 6032
