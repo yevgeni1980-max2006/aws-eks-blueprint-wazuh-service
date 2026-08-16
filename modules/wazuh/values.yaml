@@ -1,0 +1,92 @@
+
+global:
+  storageClass: standard
+
+certManager:
+  enabled: false
+
+indexer:
+  replicas: 1
+
+  cred:
+    username: admin
+    password: "fuko09phsurxho"
+    passwordHash: "$2y$12$oU7InVU.sjywhc1KsyPt6ugcmKTzZCAWMEgU9GUVQkPQHf/.qzBke"
+
+  persistence:
+    enabled: true
+    storageClass: ""
+    size: 10Gi
+
+  resources: {}
+
+  antiAffinity: hard
+
+  javaOpts: "-Xms2g -Xmx2g"
+
+manager:
+  replicas: 1
+
+  extraEnv:
+    - name: AWS_ACCESS_KEY_ID
+      valueFrom:
+        secretKeyRef:
+          name: wazuh-aws-credentials
+          key: AWS_ACCESS_KEY_ID
+
+    - name: AWS_SECRET_ACCESS_KEY
+      valueFrom:
+        secretKeyRef:
+          name: wazuh-aws-credentials
+          key: AWS_SECRET_ACCESS_KEY
+
+    - name: AWS_DEFAULT_REGION
+      value: "eu-west-2"
+
+
+  persistence:
+    enabled: true
+    storageClass: standard
+    size: 10Gi
+
+  resources: {}
+
+  service:
+    type: ClusterIP
+
+dashboard:
+  replicas: 1
+
+  cred:
+    username: kibanaserver
+    password: "fuko09phsurxho"
+    passwordHash: "$2y$12$oU7InVU.sjywhc1KsyPt6ugcmKTzZCAWMEgU9GUVQkPQHf/.qzBke"
+
+  resources: {}
+
+  ingress:
+    enabled: false
+    ingressClassName: kong
+
+filebeat:
+  replicas: 1
+
+  resources: {}
+
+  persistence:
+    enabled: true
+    storageClass: ""
+    size: 10Gi
+
+tls:
+  enabled: false
+
+monitoring:
+  prometheus:
+    enabled: true
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
