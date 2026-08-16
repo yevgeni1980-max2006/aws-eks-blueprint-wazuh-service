@@ -17,18 +17,13 @@ module "kong" {
   depends_on = [module.httpd]
 }
 
-module "minio" {
-  source = "./modules/minio"
+module "wazuh" {
+  source = "./modules/wazuh"
   depends_on = [module.kong]
-}
-
-module "proxysql" {
-  source = "./modules/proxysql"
-  depends_on = [module.minio]
 }
 
 module "ingress" {
   source = "./modules/ingress"
-  depends_on = [module.proxysql]
+  depends_on = [module.wazuh]
 }
 
