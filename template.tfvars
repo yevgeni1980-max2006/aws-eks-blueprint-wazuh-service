@@ -1,7 +1,7 @@
 
 ###  ---  Default Template  ---  ###
 aws_region      = "eu-central-1" # \\\ eu-central-1
-cluster_name    = "eks-cluster-proxysql"
+cluster_name    = "eks-cluster-wazuh"
 cluster_version = "1.35"
 instance_types  = ["t3.medium"]
 node_group_desired_size = 3
