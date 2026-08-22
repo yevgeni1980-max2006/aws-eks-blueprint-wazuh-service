@@ -1,10 +1,8 @@
-<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/14f6cb66-bb25-47c7-b31b-bffd58f14493" />
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/fd80cc0d-d0ab-419a-b529-684bfa1870b1" />
 
 
-
-
-## AWS | EKS BluePrint ProxySQL
-ProxySQL is a high-performance MySQL-compatible database proxy that sits between your application and MySQL/RDS.
+## AWS | EKS BluePrint Wazuh
+Wazuh is an open-source security platform for SIEM/XDR, providing endpoint monitoring, log analysis, threat detection, vulnerability detection, file-integrity monitoring, compliance monitoring, and security alerts
 
 
 
